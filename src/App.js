@@ -29,6 +29,19 @@ export default class App extends React.Component {
       console.log('Error with fetching AEs: ', error);
     });
   }
+
+  fetchAECompanies(accountExecEmail) {
+    const query = {
+      accountExecutive: accountExecEmail
+    }
+    Axios.post('https://codechallenges-accountexecutiveapi.azurewebsites.net/api/companies', query)
+      .then(result => {
+        this.setState( { companyData: result.data });
+      })
+      .catch(error => {
+        console.log('Error with fetching companies: ', error);
+      });
+  }
   
   render() {
     return (
@@ -40,6 +53,10 @@ export default class App extends React.Component {
         <Select accountExecs={this.state.accountExecs}/>
         <Table componanyData={this.state.companyData}/>
       </div>
+      <Select accountExecs={this.state.accountExecs}
+              fetchCompanies={this.fetchAECompanies.bind(this)}
+      />
+      <Table componanyData={this.state.companyData}/>
       </>
     );
   }
