@@ -3,8 +3,11 @@ import React from 'react';
 const Select = (props) => {
     let aeOptions;
 
-    const selectAE = (email) => {
-
+    const selectAE = (event) => {
+        const accountExec = event.target.value;
+        const emailFormat = accountExec.split(' ').join('_');
+        const email = document.querySelector(`[id^="${emailFormat}"]`).id;
+        props.fetchCompanies(email, accountExec);
     }
 
     if (props.accountExecs.length) {
@@ -13,8 +16,9 @@ const Select = (props) => {
         );
 
         return (
-            <div className="select">
-                <select className="select-accountExec" placeholder="Select an account executive">
+            <div id="select">
+                <select id="select-accountExec" value={props.selectDisplay} onChange={selectAE}>
+                    <option value="Select an account executive" disabled>Select an account executive</option>
                     {aeOptions}
                 </select>
             </div>
