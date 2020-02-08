@@ -35,7 +35,6 @@ export default class App extends React.Component {
     }
     Axios.post('https://codechallenges-accountexecutiveapi.azurewebsites.net/api/companies', query)
       .then(result => {
-        console.log(result);
         this.setState( { companyData: result.data });
       })
       .catch(error => {
