@@ -22,11 +22,24 @@ export default class App extends React.Component {
   fetchAccountExecs() {
     Axios.get('https://codechallenges-accountexecutiveapi.azurewebsites.net/api/users')
     .then(result => {
-      this.setState( { accountExecs: result });
+      this.setState( { accountExecs: result.data });
     })
     .catch(error => {
       console.log('Error with fetching AEs: ', error);
     });
+  }
+
+  fetchAECompanies(accountExecEmail) {
+    const query = {
+      accountExecutive: accountExecEmail
+    }
+    Axios.post('https://codechallenges-accountexecutiveapi.azurewebsites.net/api/companies', query)
+      .then(result => {
+        this.setState( { companyData: result.data });
+      })
+      .catch(error => {
+        console.log('Error with fetching companies: ', error);
+      });
   }
   
   render() {
@@ -37,7 +50,9 @@ export default class App extends React.Component {
           <img src={logo} className="App-logo" alt="logo" />
         </header>
       </div>
-      <Select accountExecs={this.state.accountExecs}/>
+      <Select accountExecs={this.state.accountExecs}
+              fetchCompanies={this.fetchAECompanies.bind(this)}
+      />
       <Table componanyData={this.state.companyData}/>
       </>
     );
