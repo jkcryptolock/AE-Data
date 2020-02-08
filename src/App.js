@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import Select from './Components/Select';
 import Table from './Components/Table';
 import './App.css';
+import Axios from 'axios';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -12,6 +13,20 @@ export default class App extends React.Component {
       accountExecs: [],
       companyData: []
     };
+  }
+
+  componentDidMount() {
+    this.fetchAccountExecs();
+  }
+
+  fetchAccountExecs() {
+    Axios.get('https://codechallenges-accountexecutiveapi.azurewebsites.net/api/users')
+    .then(result => {
+      this.setState( { accountExecs: result });
+    })
+    .catch(error => {
+      console.log('Error with fetching AEs: ', error);
+    });
   }
   
   render() {
