@@ -3,7 +3,7 @@ import React from 'react';
 const Table = (props) => {
 
     return (
-        <div clsss="table"></div>
+        <div className="table"></div>
     );
 }
 
