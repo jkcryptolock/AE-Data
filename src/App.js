@@ -1,26 +1,45 @@
 import React from 'react';
 import logo from './logo.svg';
+import Select from './Components/Select';
+import Table from './Components/Table';
 import './App.css';
+import Axios from 'axios';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      accountExecs: [],
+      companyData: []
+    };
+  }
+
+  componentDidMount() {
+    this.fetchAccountExecs();
+  }
+
+  fetchAccountExecs() {
+    Axios.get('https://codechallenges-accountexecutiveapi.azurewebsites.net/api/users')
+    .then(result => {
+      this.setState( { accountExecs: result });
+    })
+    .catch(error => {
+      console.log('Error with fetching AEs: ', error);
+    });
+  }
+  
+  render() {
+    return (
+      <>
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+        </header>
+      </div>
+      <Select accountExecs={this.state.accountExecs}/>
+      <Table componanyData={this.state.companyData}/>
+      </>
+    );
+  }
 }
-
-export default App;
