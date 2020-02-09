@@ -12,7 +12,6 @@ export default class App extends React.Component {
     this.state = {
       accountExecs: [],
       companyData: [],
-      loaded: false,
       selectDisplay: 'Select an account executive'
     };
   }
@@ -21,8 +20,8 @@ export default class App extends React.Component {
     this.fetchAccountExecs();
   }
 
-  async fetchAccountExecs() {
-    await Axios.get('https://codechallenges-accountexecutiveapi.azurewebsites.net/api/users')
+  fetchAccountExecs() {
+    Axios.get('https://codechallenges-accountexecutiveapi.azurewebsites.net/api/users')
     .then(result => {
       this.setState( { accountExecs: result.data } );
     })
@@ -32,14 +31,23 @@ export default class App extends React.Component {
   }
 
   fetchAECompanies(accountExecEmail, accountExec) {
-    this.setState( { selectDisplay: accountExec });
+    this.setState( { 
+      selectDisplay: accountExec,
+      companyData: 'Loading...' 
+    });
+
     const query = {
       accountExecutive: accountExecEmail
     }
+
     Axios.post('https://codechallenges-accountexecutiveapi.azurewebsites.net/api/companies', query)
       .then(result => {
-        console.log(result)
-        this.setState( { companyData: result.data } );
+        if (result.data.length) {
+          this.setState({ companyData: result.data });
+        } else {
+          this.setState({ companyData: 'None found' });
+        }
+
       })
       .catch(error => {
         console.log('Error with fetching companies: ', error);
@@ -47,18 +55,20 @@ export default class App extends React.Component {
   }
   
   render() {
+    const activeSearch = this.state.companyData.length;
+
     return (
-      <>
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
+          <div id="title">Account Executive Lookup</div>
         </header>
         <Select accountExecs={this.state.accountExecs}
                 selectDisplay={this.state.selectDisplay}
-                fetchCompanies={this.fetchAECompanies.bind(this)}/>
-        <Table companyData={this.state.companyData}/>
+                fetchCompanies={this.fetchAECompanies.bind(this)}
+        />
+        {activeSearch ? <Table companyData={this.state.companyData}/> : <></>}
       </div>
-      </>
     );
   }
 }
