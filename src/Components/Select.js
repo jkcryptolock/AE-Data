@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Select = (props) => {
+    
     let aeOptions;
 
     const selectAE = (event) => {
@@ -10,26 +11,18 @@ const Select = (props) => {
         props.fetchCompanies(email, accountExec);
     }
 
-    if (props.accountExecs.length) {
-        aeOptions = props.accountExecs.map((ae, idx)  => 
-            <option id={ae.emailAddress} key={idx}>{ae.firstName} {ae.lastName}</option>
-        );
+    aeOptions = props.accountExecs.map((ae, idx)  => 
+        <option id={ae.emailAddress} key={idx}>{ae.firstName} {ae.lastName}</option>
+    );
 
-        return (
-            <div id="select">
-                <select id="select-accountExec" value={props.selectDisplay} onChange={selectAE}>
-                    <option value="Select an account executive" disabled>Select an account executive</option>
-                    {aeOptions}
-                </select>
-            </div>
-        );
-    } else {
-        return (
-            <></>
-        )
-    }
-
-
+    return (
+        <div id="select">
+            <select id="select-accountExec" value={props.selectDisplay} onChange={selectAE}>
+                <option value="Select an account executive" disabled>Select an account executive</option>
+                {aeOptions}
+            </select>
+        </div>
+    );
 }
 
 export default Select;
